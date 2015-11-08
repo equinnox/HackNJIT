@@ -1,3 +1,4 @@
+#include <Hx711.h>
 #include <SPI.h>
 #include <Dhcp.h>
 #include <Dns.h>
@@ -12,6 +13,12 @@ EthernetClient client;
 
 int numRuns = 1;   // Execution count, so this doesn't run forever
 int maxRuns = 1;   // Maximum number of times the Choreo should be executed
+
+// Hx711.DOUT - pin #A2
+// Hx711.SCK - pin #A3
+
+
+Hx711 scale(A2, A3);
 
 void setup() {
   Serial.begin(9600);
@@ -40,7 +47,14 @@ void setup() {
 }
 
 void loop() {
-  Serial.print("loop");
+  int current_weight = scale.getGram();
+  
+  //Print Statements for value of weight
+  //Serial.print(scale.getGram(), 1);
+  //Serial.println(" g");
+  //delay(200);
+
+   Serial.print("loop");
  
   if (numRuns <= maxRuns) {
     Serial.println("Running SendEmail - Run #" + String(numRuns++));
@@ -87,6 +101,5 @@ void loop() {
 
   Serial.println("\nWaiting...\n");
   delay(30000); // wait 30 seconds between SendEmail calls
- 
-}
 
+}
